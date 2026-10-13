@@ -163,4 +163,9 @@ public interface PieceOfFurniture {
    * @since 3.4
    */
   public abstract String getCurrency();
+
+  /**
+   * Returns the volume of this piece of furniture.
+   */
+  public abstract float getVolume();
 }

@@ -153,12 +153,16 @@ public class Home implements Serializable, Cloneable {
     this.furniture = new ArrayList<HomePieceOfFurniture>(furniture);
     this.walls = new ArrayList<Wall>();
     this.wallHeight = wallHeight;
-    this.furnitureVisibleProperties = Arrays.asList(new HomePieceOfFurniture.SortableProperty [] {
-        HomePieceOfFurniture.SortableProperty.NAME,
-        HomePieceOfFurniture.SortableProperty.WIDTH,
-        HomePieceOfFurniture.SortableProperty.DEPTH,
-        HomePieceOfFurniture.SortableProperty.HEIGHT,
-        HomePieceOfFurniture.SortableProperty.VISIBLE});
+    this.furnitureVisibleProperties =
+        Arrays.asList(
+            new HomePieceOfFurniture.SortableProperty[] {
+              HomePieceOfFurniture.SortableProperty.NAME,
+              HomePieceOfFurniture.SortableProperty.WIDTH,
+              HomePieceOfFurniture.SortableProperty.DEPTH,
+              HomePieceOfFurniture.SortableProperty.HEIGHT,
+              HomePieceOfFurniture.SortableProperty.VOLUME,
+              HomePieceOfFurniture.SortableProperty.VISIBLE
+            });
     // Init transient lists and other fields
     init(true);
     addModelListeners();
@@ -312,16 +316,20 @@ public class Home implements Serializable, Cloneable {
     initListenersSupport(this);
 
     if (this.furnitureVisibleProperties == null) {
-      // Set the furniture properties that were visible before version 0.19 
-      this.furnitureVisibleProperties = Arrays.asList(new HomePieceOfFurniture.SortableProperty [] {
-          HomePieceOfFurniture.SortableProperty.NAME,
-          HomePieceOfFurniture.SortableProperty.WIDTH,
-          HomePieceOfFurniture.SortableProperty.DEPTH,
-          HomePieceOfFurniture.SortableProperty.HEIGHT,
-          HomePieceOfFurniture.SortableProperty.COLOR,
-          HomePieceOfFurniture.SortableProperty.MOVABLE,
-          HomePieceOfFurniture.SortableProperty.DOOR_OR_WINDOW,
-          HomePieceOfFurniture.SortableProperty.VISIBLE});
+      // Set the furniture properties that were visible before version 0.19
+      this.furnitureVisibleProperties =
+          Arrays.asList(
+              new HomePieceOfFurniture.SortableProperty[] {
+                HomePieceOfFurniture.SortableProperty.NAME,
+                HomePieceOfFurniture.SortableProperty.WIDTH,
+                HomePieceOfFurniture.SortableProperty.DEPTH,
+                HomePieceOfFurniture.SortableProperty.HEIGHT,
+                HomePieceOfFurniture.SortableProperty.VOLUME,
+                HomePieceOfFurniture.SortableProperty.COLOR,
+                HomePieceOfFurniture.SortableProperty.MOVABLE,
+                HomePieceOfFurniture.SortableProperty.DOOR_OR_WINDOW,
+                HomePieceOfFurniture.SortableProperty.VISIBLE
+              });
     }
     // Create a default top camera that matches default point of view 
     this.topCamera = new Camera(50, 1050, 1010, 
@@ -488,6 +496,7 @@ public class Home implements Serializable, Cloneable {
       case WIDTH : 
       case DEPTH :
       case HEIGHT :
+      case VOLUME :
       case MOVABLE :
       case DOOR_OR_WINDOW :
       case COLOR :
