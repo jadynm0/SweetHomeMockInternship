@@ -729,8 +729,25 @@ public class FurnitureTable extends JTable implements View, Printable {
   public int print(Graphics g, PageFormat pageFormat, int pageIndex) throws PrinterException {
     // Create a printable column model from the column model of this table 
     // with printable renderers for each column
-    DefaultTableColumnModel printableColumnModel = new DefaultTableColumnModel();
+    Home home = ((FurnitureTreeTableModel) getModel()).home;
     TableColumnModel columnModel = getColumnModel();
+    TableColumn addedLevelColumn = null;
+    if (home.getLevels().size() > 1 && columnModel instanceof FurnitureTableColumnModel) {
+      boolean levelPresent = false;
+      for (int i = 0; i < columnModel.getColumnCount(); i++) {
+        if (HomePieceOfFurniture.SortableProperty.LEVEL.equals(columnModel.getColumn(i).getIdentifier())) {
+          levelPresent = true;
+          break;
+        }
+      }
+      if (!levelPresent) {
+        addedLevelColumn = ((FurnitureTableColumnModel) columnModel).availableColumns.get(HomePieceOfFurniture.SortableProperty.LEVEL);
+        if (addedLevelColumn != null) {
+          columnModel.addColumn(addedLevelColumn);
+        }
+      }
+    }
+    DefaultTableColumnModel printableColumnModel = new DefaultTableColumnModel();
     final DefaultTableCellRenderer defaultRenderer = new DefaultTableCellRenderer();
     defaultRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
     TableCellRenderer printableHeaderRenderer = new TableCellRenderer() {
@@ -778,7 +795,10 @@ public class FurnitureTable extends JTable implements View, Printable {
       // Change printable column header renderer
       printableColumn.setHeaderRenderer(printableHeaderRenderer);
       printableColumnModel.addColumn(printableColumn);
-    }    
+    }
+    if (addedLevelColumn != null) {
+      columnModel.removeColumn(addedLevelColumn);
+    }
     return print(g, pageFormat, pageIndex, printableColumnModel, Color.BLACK);
   }
 
@@ -1008,7 +1028,7 @@ public class FurnitureTable extends JTable implements View, Printable {
    * Column table model used by this table.
    */
   private static class FurnitureTableColumnModel extends DefaultTableColumnModel {
-    private Map<HomePieceOfFurniture.SortableProperty, TableColumn> availableColumns;
+    Map<HomePieceOfFurniture.SortableProperty, TableColumn> availableColumns;
 
     public FurnitureTableColumnModel(Home home, UserPreferences preferences) {
       createAvailableColumns(home, preferences);
